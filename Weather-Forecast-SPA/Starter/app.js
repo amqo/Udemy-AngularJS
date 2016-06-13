@@ -41,7 +41,7 @@ weatherApp.controller('homeController', ['$scope', 'cityService',
 weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams',
   'cityService', function($scope, $resource, $routeParams, cityService) {
 
-    $scope.cnt = $routeParams.cnt || 2;
+    $scope.cnt = $routeParams.cnt || '2';
 
     $scope.city = cityService.city;
 

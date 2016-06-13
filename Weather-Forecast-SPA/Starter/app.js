@@ -30,12 +30,17 @@ weatherApp.service('cityService', function() {
 
 
 // CONTROLLERS
-weatherApp.controller('homeController', ['$scope', 'cityService',
-  function($scope, cityService) {
+weatherApp.controller('homeController', ['$scope', '$location', 'cityService',
+  function($scope, $location, cityService) {
     $scope.city = cityService.city;
+
     $scope.$watch('city', () => {
       cityService.city = $scope.city;
     });
+
+    $scope.submit = () => {
+      $location.path("/forecast");
+    };
 }]);
 
 weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams',
@@ -60,13 +65,11 @@ weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParam
 }]);
 
 // DIRECTIVES
-weatherApp.directive("weatherReport", function() {
+weatherApp.directive("weatherReport", () => {
   return {
       restrict: 'E',
       // templateUrl: 'directives/weather_report.html',
-      templateUrl: function() {
-        return "directives/weather_report.html?" + new Date();
-      },
+      templateUrl: () => "directives/weather_report.html?" + new Date(),
       replace: true,
       scope: {
         weatherObject: '=',

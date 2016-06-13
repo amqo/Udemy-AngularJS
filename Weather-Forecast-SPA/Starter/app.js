@@ -2,7 +2,7 @@
 var weatherApp = angular.module('weatherApp', ['ngRoute', 'ngResource']);
 
 // ROUTES
-weatherApp.config(function($routeProvider) {
+weatherApp.config(($routeProvider) => {
 
   $routeProvider
 
@@ -16,7 +16,7 @@ weatherApp.config(function($routeProvider) {
     controller: 'forecastController'
   })
 
-  .when('/forecast/:days', {
+  .when('/forecast/:cnt', {
     templateUrl: 'pages/forecast.html',
     controller: 'forecastController'
   });
@@ -25,7 +25,7 @@ weatherApp.config(function($routeProvider) {
 
 // SERVICES
 weatherApp.service('cityService', function() {
-  this.city = "Barcelona, B";
+  this.city = "Barcelona";
 });
 
 
@@ -33,7 +33,7 @@ weatherApp.service('cityService', function() {
 weatherApp.controller('homeController', ['$scope', 'cityService',
   function($scope, cityService) {
     $scope.city = cityService.city;
-    $scope.$watch('city', function() {
+    $scope.$watch('city', () => {
       cityService.city = $scope.city;
     });
 }]);
@@ -41,7 +41,7 @@ weatherApp.controller('homeController', ['$scope', 'cityService',
 weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams',
   'cityService', function($scope, $resource, $routeParams, cityService) {
 
-    $scope.cnt = $routeParams.days || 2;
+    $scope.cnt = $routeParams.cnt || 4;
 
     $scope.city = cityService.city;
 
@@ -55,13 +55,6 @@ weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParam
       cnt: $scope.cnt, APPID: WEATHER_API_APPID
     });
 
-    $scope.roundTemperature = function(temp) {
-      return temp.toFixed(1);
-    }
-
-    $scope.convertToDate = function(dt) {
-      return new Date(dt * 1000);
-    };
-
-    console.log($scope.weatherResult);
+    $scope.roundTemperature = (temp) => temp.toFixed(1);
+    $scope.convertToDate = (dt) => new Date(dt * 1000);
 }]);

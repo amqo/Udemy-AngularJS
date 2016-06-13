@@ -13,12 +13,12 @@ weatherApp.config(($routeProvider) => {
 
   .when('/forecast', {
     templateUrl: 'pages/forecast.html',
-    controller: 'forecastController'
+    controller: 'forecastController as fcastCtr'
   })
 
   .when('/forecast/:cnt', {
     templateUrl: 'pages/forecast.html',
-    controller: 'forecastController'
+    controller: 'forecastController as fcastCtr'
   });
 
 });
@@ -60,16 +60,16 @@ weatherApp.controller('homeController', ['$scope', '$location', 'cityService',
 }]);
 
 weatherApp.controller('forecastController',
-  ['$scope', '$routeParams', 'cityService', 'weatherService',
-  function($scope, $routeParams, cityService, weatherService) {
+  ['$routeParams', 'cityService', 'weatherService',
+  function($routeParams, cityService, weatherService) {
 
-    $scope.cnt = $routeParams.cnt || '2';
-    $scope.city = cityService.city;
+    this.cnt = $routeParams.cnt || '2';
+    this.city = cityService.city;
 
-    $scope.weatherResult = weatherService.GetWeather($scope.city, $scope.cnt);
+    this.weatherResult = weatherService.GetWeather(this.city, this.cnt);
 
-    $scope.roundTemperature = (temp) => temp.toFixed(1);
-    $scope.convertToDate = (dt) => new Date(dt * 1000);
+    this.roundTemperature = (temp) => temp.toFixed(1);
+    this.convertToDate = (dt) => new Date(dt * 1000);
 }]);
 
 // DIRECTIVES

@@ -58,3 +58,21 @@ weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParam
     $scope.roundTemperature = (temp) => temp.toFixed(1);
     $scope.convertToDate = (dt) => new Date(dt * 1000);
 }]);
+
+// DIRECTIVES
+weatherApp.directive("weatherReport", function() {
+  return {
+      restrict: 'E',
+      // templateUrl: 'directives/weather_report.html',
+      templateUrl: function() {
+        return "directives/weather_report.html?" + new Date();
+      },
+      replace: true,
+      scope: {
+        weatherObject: '=',
+        convertToDate: '&',
+        roundTemperature: '&',
+        dateFormat: '@'
+      }
+  }
+});

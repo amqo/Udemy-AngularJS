@@ -14,14 +14,12 @@ Days: <a href="#forecast/2" ng-class="{ 'selected': cnt === '2' }">2</a> |
 <div ng-repeat="w in weatherResult.list">
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">{{ convertToDate(w.dt) | date: 'MMM d, y H:mm' }}</h3>
-        </div>
-        <div class="panel-body">
-          Daytime temperature: {{ roundTemperature(w.temp.day) }}
-        </div>
-      </div>
+      <weather-report
+        weather-object="w"
+        convert-to-date="convertToDate(date)"
+        round-temperature="roundTemperature(temperature)"
+        date-format="MMM d, y H:mm" >
+      </weather-report>
     </div>
   </div>
 </div>

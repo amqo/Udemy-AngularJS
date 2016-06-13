@@ -1,3 +1,14 @@
+Forecast for {{ city }}
+
+<hr />
+
+Days: <a href="#forecast/2" ng-class="{ 'selected': cnt === '2' }">2</a> |
+<a href="#forecast/5" ng-class="{ 'selected': cnt === '5' }">5</a> |
+<a href="#forecast/10" ng-class="{ 'selected': cnt === '10' }">10</a> |
+<a href="#forecast/16" ng-class="{ 'selected': cnt === '16' }">16</a>
+
+<hr />
+
 <div ng-repeat="w in weatherResult.list">
   <div class="row">
     <div class="col-md-12">
@@ -6,7 +17,7 @@
           <h3 class="panel-title">{{ convertToDate(w.dt) | date: 'MMM d, y H:mm' }}</h3>
         </div>
         <div class="panel-body">
-          Daytime temperature: {{ roundTemperature(w.main.temp) }}
+          Daytime temperature: {{ roundTemperature(w.temp.day) }}
         </div>
       </div>
     </div>

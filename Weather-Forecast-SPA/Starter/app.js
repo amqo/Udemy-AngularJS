@@ -28,6 +28,22 @@ weatherApp.service('cityService', function() {
   this.city = "Barcelona";
 });
 
+// Using service $resource inside custom service
+weatherApp.service('weatherService', ['$resource', function($resource) {
+
+  this.GetWeather = function(city, cnt) {
+    var weatherAPI = $resource(
+      "http://api.openweathermap.org/data/2.5/forecast/daily",
+      { callback: "JSON_CALLBACK" }, { get: { method: "JSONP" }}
+    );
+
+    return weatherAPI.get({
+      q: city, mode: "json", units: "metric",
+      cnt: cnt, APPID: WEATHER_API_APPID
+    });
+  }
+}]);
+
 
 // CONTROLLERS
 weatherApp.controller('homeController', ['$scope', '$location', 'cityService',
@@ -43,22 +59,14 @@ weatherApp.controller('homeController', ['$scope', '$location', 'cityService',
     };
 }]);
 
-weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams',
-  'cityService', function($scope, $resource, $routeParams, cityService) {
+weatherApp.controller('forecastController',
+  ['$scope', '$routeParams', 'cityService', 'weatherService',
+  function($scope, $routeParams, cityService, weatherService) {
 
     $scope.cnt = $routeParams.cnt || '2';
-
     $scope.city = cityService.city;
 
-    $scope.weatherAPI = $resource(
-      "http://api.openweathermap.org/data/2.5/forecast/daily",
-      { callback: "JSON_CALLBACK" }, { get: { method: "JSONP" }}
-    );
-
-    $scope.weatherResult = $scope.weatherAPI.get({
-      q: $scope.city, mode: "json", units: "metric",
-      cnt: $scope.cnt, APPID: WEATHER_API_APPID
-    });
+    $scope.weatherResult = weatherService.GetWeather($scope.city, $scope.cnt);
 
     $scope.roundTemperature = (temp) => temp.toFixed(1);
     $scope.convertToDate = (dt) => new Date(dt * 1000);

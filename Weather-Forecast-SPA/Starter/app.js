@@ -14,6 +14,11 @@ weatherApp.config(function($routeProvider) {
   .when('/forecast', {
     templateUrl: 'pages/forecast.html',
     controller: 'forecastController'
+  })
+
+  .when('/forecast/:days', {
+    templateUrl: 'pages/forecast.html',
+    controller: 'forecastController'
   });
 
 });
@@ -33,8 +38,11 @@ weatherApp.controller('homeController', ['$scope', 'cityService',
     });
 }]);
 
-weatherApp.controller('forecastController', ['$scope', '$resource', 'cityService',
-  function($scope, $resource, cityService) {
+weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams',
+  'cityService', function($scope, $resource, $routeParams, cityService) {
+
+    $scope.cnt = $routeParams.days || 2;
+
     $scope.city = cityService.city;
 
     $scope.weatherAPI = $resource(
@@ -44,8 +52,16 @@ weatherApp.controller('forecastController', ['$scope', '$resource', 'cityService
 
     $scope.weatherResult = $scope.weatherAPI.get({
       q: $scope.city, mode: "json", units: "metric",
-      cnt: 2, APPID: WEATHER_API_APPID
+      cnt: $scope.cnt, APPID: WEATHER_API_APPID
     });
+
+    $scope.roundTemperature = function(temp) {
+      return temp.toFixed(1);
+    }
+
+    $scope.convertToDate = function(dt) {
+      return new Date(dt * 1000);
+    };
 
     console.log($scope.weatherResult);
 }]);
